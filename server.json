@@ -18,8 +18,8 @@
     },
     {
       "image": "https://storage.googleapis.com/golden-wind/bootcamp-gostack/desafio-food/food2.png",
-      "name": "teste",
-      "price": "50.00",
+      "name": "testando",
+      "price": "100.50",
       "description": "food teste",
       "available": false,
       "id": 4

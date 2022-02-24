@@ -7,28 +7,24 @@ import Input from '../Input';
 import { useRef } from 'react';
 import { FormHandles } from '@unform/core';
 
-interface Food{
-  "id" : number,
+interface AddFood{  
   "name": string,
   "description": string,
-  "price": string,  
-  "available": boolean,
+  "price": string,    
   "image": string
 }
-
-type inputData = Omit<Food,'id' | 'available'>
 
 interface FoodProps{   
   isOpen:boolean
   setIsOpen: ()=>void,
-  handleAddFood : (data:inputData)=>void
+  handleAddFood : (data:AddFood)=>void
 }
 
 export function ModalAddFood({setIsOpen,handleAddFood,isOpen} : FoodProps){ 
   
   const formRef = useRef<FormHandles>(null)
 
-  const handleSubmit = (data:inputData) =>{              
+  const handleSubmit = (data:AddFood) =>{              
     handleAddFood(data);
     setIsOpen();
   };

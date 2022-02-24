@@ -10,7 +10,7 @@ import { FoodsContainer } from './styles';
 
 export function Dashboard(){
  
-type FoodData={   
+interface IFood{   
   "id": number,   
   "name": string,
   "description": string,
@@ -19,8 +19,8 @@ type FoodData={
   "image": string
 }
 
-const [foods,setFoods] = useState<FoodData[]>([])
-const [editingFood,setEditingFood] = useState({})
+const [foods,setFoods] = useState<IFood[]>([])
+const [editingFood,setEditingFood] = useState<IFood>({} as IFood)
 const [modalOpen,setModalOpen] = useState(false)
 const [editModalOpen,setEditModalOpen] = useState(false)
 
@@ -31,9 +31,9 @@ useEffect(()=>{
     })
  },[])
 
- type inputFood = Omit<FoodData,'id' | 'available'>
+ type inputFood = Omit<IFood,'id' | 'available'>
 
-const handleAddFood = async (food:inputFood) => {  
+const handleAddFood = async (food:inputFood):Promise<void> => {  
   try {
     const response = await api.post('/foods', {
       ...food,
@@ -41,6 +41,19 @@ const handleAddFood = async (food:inputFood) => {
     });
     const data = response.data    
     setFoods([...foods,data])    
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+const handleUpdateFood = async (food:inputFood):Promise<void> => {  
+  try {
+    const foodUpdated = await api.put(`/foods/${editingFood.id}`, {
+      ...editingFood,
+      ...food,
+    });
+    const foodsUpdeted = foods.map(f=>f.id!==foodUpdated.data.id ? f :foodUpdated.data)
+    setFoods(foodsUpdeted)    
   } catch (err) {
     console.log(err);
   }
@@ -63,10 +76,9 @@ const toggleEditModal = () => {
   setEditModalOpen(!editModalOpen)   
 }
 
-const handleEditFood = (food:FoodData) => {    
+const handleEditFood = async (food:IFood) => {      
   setEditingFood(food)     
-  setEditModalOpen(true)  
-  console.log(editingFood)
+  setEditModalOpen(true)   
 }
   
 return (
@@ -81,7 +93,7 @@ return (
           isOpen={editModalOpen}
           setIsOpen={toggleEditModal}
           editingFood={editingFood}
-          handleUpdateFood={handleEditFood}
+          handleUpdateFood={handleUpdateFood}
         />
 
         <FoodsContainer data-testid="foods-list">

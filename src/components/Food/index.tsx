@@ -3,7 +3,7 @@ import { FiEdit3, FiTrash } from 'react-icons/fi';
 import { Container } from './styles';
 import api from '../../services/api';
 
-type FoodData={   
+interface FoodData{   
   "id": number,   
   "name": string,
   "description": string,
